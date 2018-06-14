@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Blog</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <form method="post" th:object="${blog}" th:action="@{/blog/delete}">
+            <input class="form-control" type="hidden" th:field="*{id}"/>
+                <div class="form-group">
+                    <label><h3 th:text="${blog.title}"></h3></label>
+                </div>
+                <div class="form-group">
+                    <label><p th:text="${blog.summary}"></p></label>
+                </div>
+                <div class="form-group">
+                    <label><p th:text="${blog.content}"></p></label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <p>Thể Loại: <span th:text="${blog.category.name}"></span> </p>
+                    </label>
+                </div>
+            <button class="btn btn-primary" type="submit">Delete</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

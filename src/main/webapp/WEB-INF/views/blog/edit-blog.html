@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Blog</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <th:block th:if="${message}">
+            <p th:text="${message}"></p>
+        </th:block>
+        <form th:action="@{/blog/edit}" th:object="${blog}" method="post">
+            <input class="form-control" type="hidden" name="id" th:field="*{id}"/>
+            <div class="form-group">
+                <label for="blog-title">Title:</label>
+                <input class="form-control" id="blog-title" type="text" th:field="*{title}"/>
+            </div>
+            <div class="form-group">
+                <label for="blog-summary">Summary:</label>
+                <textarea class="form-control" id="blog-summary" th:field="*{summary}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="blog-content">Content:</label>
+                <textarea class="form-control" id="blog-content" th:field="*{content}"></textarea>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="blog-category">Category:</label>
+                <select class="form-control" id="blog-category" th:field="*{category}">
+                    <option th:each="cate:${categories}"
+                            th:value="${cate.id}"
+                            th:text="${cate.name}"
+                            th:selected="${cate.id == blog.category.id}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="btn"></label>
+                <button class="btn btn-primary" id="btn" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

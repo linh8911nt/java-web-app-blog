@@ -10,7 +10,7 @@ public interface BlogService {
 
     Blog findById(Long id);
 
-    void save(Blog blog);
+    Blog save(Blog blog);
 
     void delete(Long id);
 }

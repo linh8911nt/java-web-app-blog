@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <div class="col-md-8">
+            <h3 th:text="${blog.title}"></h3> (<a th:href="@{/blog/edit/__${blog.id}__}">Edit</a>)
+            (<a th:href="@{/blog/delete/__${blog.id}__}">Delete</a>)
+            <div class="post-single-meta">
+                <span th:text="${blog.createDate}"></span>
+            </div>
+            <div class="post-single-teaser" th:utext="${blog.summary}"></div>
+            <img class="img-fluid" th:src="@{/image/__${blog.image}__}">
+            <div class="post-single-content" th:utext="${blog.content}"></div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

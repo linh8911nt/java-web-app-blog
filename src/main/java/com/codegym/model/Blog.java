@@ -1,21 +1,23 @@
 package com.codegym.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "blog")
+@Table(name = "blogs")
 public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+
+    @Lob
     private String summary;
+
+    @Lob
     private String content;
 
+    private String image;
     private LocalDate createDate = LocalDate.now();
 
     @ManyToOne
@@ -25,12 +27,21 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(String title, String summary, String content, LocalDate createDate, Category category) {
+    public Blog(String title, String summary, String content, String image, LocalDate createDate, Category category) {
         this.title = title;
         this.summary = summary;
         this.content = content;
+        this.image = image;
         this.createDate = createDate;
         this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public LocalDate getCreateDate() {

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout.html}">
+<head>
+    <meta charset="utf-8">
+    <title>Create New Blog</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+    <div class="container">
+        <h3>Create New Blog</h3>
+        <th:block th:if="${message}">
+            <p th:text="${message}"></p>
+        </th:block>
+        <form method="post" th:object="${blogForm}" th:action="@{/blog/create}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="blog-title">Title Blog:</label>
+                <input class="form-control" id="blog-title" type="text" th:field="*{title}">
+            </div>
+            <div class="form-group">
+                <label for="blog-summary">Summary:</label>
+                <input class="form-control" id="blog-summary" type="text" th:field="*{summary}">
+            </div>
+            <div class="form-group">
+                <label for="blog-content">Content: </label>
+                <textarea class="form-control" id="blog-content" type="text" th:field="*{content}"></textarea>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="blog-category">Category:</label>
+                <select class="form-control" id="blog-category" th:field="*{category}">
+                    <option th:each="element:${categories}"
+                            th:value="${element.id}"
+                            th:text="${element.name}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Feature image:</label>
+                <input type="file" th:field="*{image}"/>
+            </div>
+            <div class="form-group">
+                <label for="btn-submit"></label>
+                <button class="btn btn-primary" id="btn-submit" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ import javax.servlet.Filter;
 public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{ApplicationConfig.class};
+        return new Class[]{ApplicationConfig.class, ApplicationSecurityConfig.class};
     }
 
     @Override
@@ -23,9 +23,8 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 
     @Override
     protected Filter[] getServletFilters() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return new CharacterEncodingFilter[] {characterEncodingFilter};
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8", true);
+
+        return new Filter[]{characterEncodingFilter};
     }
 }

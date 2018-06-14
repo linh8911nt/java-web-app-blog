@@ -8,7 +8,7 @@ public interface CategoryService {
 
     Category findById(Long id);
 
-    void save(Category category);
+    Category save(Category category);
 
     void delete(Long id);
 }

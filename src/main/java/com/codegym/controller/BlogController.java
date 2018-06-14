@@ -1,21 +1,28 @@
 package com.codegym.controller;
 
 import com.codegym.model.Blog;
+import com.codegym.model.BlogForm;
 import com.codegym.model.Category;
 import com.codegym.service.BlogService;
 import com.codegym.service.CategoryService;
+import com.codegym.utils.StorageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.UUID;
+
 @Controller
+//@RequestMapping("/admin")
 public class BlogController {
+
     @Autowired
     BlogService blogService;
 
@@ -36,25 +43,41 @@ public class BlogController {
     @GetMapping("/")
     public ModelAndView showBlog(Pageable pageable){
         Page<Blog> blogs = blogService.findAll(pageable);
-        Iterable<Category> categories = categoryService.findAll();
-        ModelAndView modelAndView = new ModelAndView("/index", "blogs", blogs);
-        modelAndView.addObject("categories", categories);
+        ModelAndView modelAndView = new ModelAndView("/index");
+        modelAndView.addObject("blogs", blogs);
         return modelAndView;
     }
 
     @GetMapping("/blog/create")
-    public ModelAndView showFormCreateBlog(ModelAndView modelAndView){
-        modelAndView = new ModelAndView("/blog/create");
-        modelAndView.addObject("blog", new Blog());
+    public ModelAndView showFormCreateBlog(){
+        ModelAndView modelAndView = new ModelAndView("/blog/create-blog");
+        modelAndView.addObject("blogForm", new BlogForm());
         return modelAndView;
     }
 
     @PostMapping("/blog/create")
-    public ModelAndView crateBlog(@ModelAttribute("blog") Blog blog){
-        blogService.save(blog);
+    public ModelAndView crateBlog(@ModelAttribute("blogForm") BlogForm blogForm){
+        try {
+            String randomCode = UUID.randomUUID().toString();
+            String originFileName = blogForm.getImage().getOriginalFilename();
+            String randomName = randomCode + StorageUtils.getFileExtension(originFileName);
+            blogForm.getImage().transferTo(new File(StorageUtils.FEATURE_LOCATION + "/" + randomName));
 
-        ModelAndView modelAndView = new ModelAndView("/blog/create", "blog", new Blog());
-        modelAndView.addObject("message", "Create Success!!!");
+            Blog blog = new Blog();
+            blog.setTitle(blogForm.getTitle());
+            blog.setSummary(blogForm.getSummary());
+            blog.setContent(blogForm.getContent());
+            blog.setCreateDate(LocalDate.now());
+            blog.setCategory(blogForm.getCategory());
+            blog.setImage(randomName);
+
+            blogService.save(blog);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        ModelAndView modelAndView = new ModelAndView("/blog/create-blog");
+        modelAndView.addObject("blogForm", new BlogForm());
+        modelAndView.addObject("message", "Blog saved successfully");
         return modelAndView;
     }
 
@@ -62,7 +85,8 @@ public class BlogController {
     public ModelAndView viewBlog(@PathVariable("id") Long id){
         Blog blog = blogService.findById(id);
 
-        ModelAndView modelAndView = new ModelAndView("/blog/view", "blog", blog);
+        ModelAndView modelAndView = new ModelAndView("/blog/view-blog");
+        modelAndView.addObject("blog", blog);
         return modelAndView;
     }
 
@@ -70,7 +94,8 @@ public class BlogController {
     public ModelAndView showEditForm(@PathVariable("id") Long id){
         Blog blog = blogService.findById(id);
 
-        ModelAndView modelAndView = new ModelAndView("/blog/edit", "blog", blog);
+        ModelAndView modelAndView = new ModelAndView("/blog/edit-blog");
+        modelAndView.addObject("blog", blog);
         return modelAndView;
     }
 
@@ -78,7 +103,8 @@ public class BlogController {
     public ModelAndView editBlog(@ModelAttribute("blog") Blog blog){
         blogService.save(blog);
 
-        ModelAndView modelAndView = new ModelAndView("/blog/edit", "blog", blog);
+        ModelAndView modelAndView = new ModelAndView("/blog/edit-blog");
+        modelAndView.addObject("blog", blog);
         modelAndView.addObject("message", "Update Success!!!");
         return modelAndView;
     }
@@ -87,7 +113,8 @@ public class BlogController {
     public ModelAndView showDeleteForm(@PathVariable("id") Long id){
         Blog blog = blogService.findById(id);
 
-        ModelAndView modelAndView = new ModelAndView("/blog/delete", "blog", blog);
+        ModelAndView modelAndView = new ModelAndView("/blog/delete-blog");
+        modelAndView.addObject("blog", blog);
         return modelAndView;
     }
 

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>Category</title>
 </head>
 <body>
-<h3>Category</h3>
-
-<a th:href="@{/}">Blogs</a>
-
-<a th:href="@{/category/create}">Create New Category</a><br/> <br/>
-
-<table border="1">
-    <tr>
-        <td>Category</td>
-        <td>Edit</td>
-        <td>Delete</td>
-    </tr>
-    <tr th:each="category:${categories}">
-        <td th:text="${category.name}"></td>
-        <td><a th:href="@{/category/edit/__${category.id}__}">Edit</a></td>
-        <td><a th:href="@{/category/delete/__${category.id}__}">Delete</a></td>
-    </tr>
-</table>
+<section layout:fragment="content">
+    <div class="container">
+        <h3>Category</h3>
+        <table class="table">
+            <tr>
+                <td>Category</td>
+                <td>Edit</td>
+                <td>Delete</td>
+            </tr>
+            <tr th:each="category:${categories}">
+                <td th:text="${category.name}"></td>
+                <td><a th:href="@{/category/edit/__${category.id}__}">Edit</a></td>
+                <td><a th:href="@{/category/delete/__${category.id}__}">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+</section>
 </body>
 </html>
