@@ -1,11 +1,10 @@
 package com.codegym.controller.impl;
 
-import com.codegym.controller.BlogController;
+import com.codegym.controller.PostController;
 import com.codegym.controller.BlogControllerImplTestConfig;
-import com.codegym.model.Blog;
+import com.codegym.model.Post;
 import com.codegym.model.Category;
-import com.codegym.service.BlogService;
-import com.codegym.service.CategoryService;
+import com.codegym.service.PostService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitJupiterConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringJUnitJupiterConfig(BlogControllerImplTestConfig.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {BlogControllerImplTestConfig.class})
-public class BlogApiControllerImplTest {
+public class PostApiControllerImplTest {
 
     static private Long id = 1l;
     static private String title;
@@ -51,47 +49,47 @@ public class BlogApiControllerImplTest {
     static private List<Category> categories;
     static private Iterable<Category> categoryIterable;
 
-    static private Blog blog;
-    static private List<Blog> blogs;
-    static private Page<Blog> blogsPage;
+    static private Post post;
+    static private List<Post> posts;
+    static private Page<Post> blogsPage;
 
     static private Pageable pageable;
 
-    static private Blog emptyBlog;
-    static private List<Blog> emptyBlogs;
-    static private Page<Blog> emptyBlogsPage;
+    static private Post emptyPost;
+    static private List<Post> emptyPosts;
+    static private Page<Post> emptyBlogsPage;
 
     static{
         title = "blogtitle";
-        summary = "blog summary";
-        content = "blog content";
+        summary = "post summary";
+        content = "post content";
 
         category = new Category("category");
         category.setId(1l);
 //        categories = Arrays.asList(category);
 //        categoryIterable = new PageImpl<>(categories);
 
-        blog = new Blog(title, summary, content, createDate, category);
-        blog.setId(id);
+        post = new Post(title, summary, content, createDate, category);
+        post.setId(id);
 
-        blogs = Arrays.asList(blog);
-        blogsPage = new PageImpl<>(blogs);
+        posts = Arrays.asList(post);
+        blogsPage = new PageImpl<>(posts);
 
-        emptyBlog = new Blog();
-        emptyBlogs = new ArrayList<>();
-        emptyBlogsPage = new PageImpl<>(emptyBlogs);
+        emptyPost = new Post();
+        emptyPosts = new ArrayList<>();
+        emptyBlogsPage = new PageImpl<>(emptyPosts);
 
         pageable = new PageRequest(0, 2);
     }
 
     @Autowired
-    private BlogService blogService;
+    private PostService postService;
 
 //    @Autowired
 //    private CategoryService categoryService;
 
     @Autowired
-    private BlogController blogController;
+    private PostController postController;
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
@@ -100,94 +98,94 @@ public class BlogApiControllerImplTest {
 
     @BeforeEach
     void setUp(){
-        mockMvc = MockMvcBuilders.standaloneSetup(blogController)
+        mockMvc = MockMvcBuilders.standaloneSetup(postController)
                 .setCustomArgumentResolvers(pageableHandlerMethodArgumentResolver)
                 .build();
     }
 
     @AfterEach
     void resetAllMockedObject(){
-        Mockito.reset(blogService);
+        Mockito.reset(postService);
     }
 
     @Test
     void listBlogs() throws Exception {
-        when(blogService.findAll(pageable)).thenReturn(blogsPage);
+        when(postService.findAll(pageable)).thenReturn(blogsPage);
 
         mockMvc.perform(get("/")
                 .param("page", pageable.getPageNumber() + "")
                 .param("size", pageable.getPageSize() + ""))
                 .andExpect(view().name("/index"))
-                .andExpect(model().attribute("blogs", blogsPage));
+                .andExpect(model().attribute("posts", blogsPage));
 
-        verify(blogService).findAll(pageable);
+        verify(postService).findAll(pageable);
     }
 
     @Test
     void showCreateForm() throws Exception {
-        mockMvc.perform(get("/blog/create"))
-                .andExpect(view().name("/blog/create-blog"))
-                .andExpect(model().attributeExists("blog"));
+        mockMvc.perform(get("/post/create"))
+                .andExpect(view().name("/post/create-post"))
+                .andExpect(model().attributeExists("post"));
     }
 
     @Test
     void saveBlogSuccess() throws Exception {
-        mockMvc.perform(post("/blog/create"))
-                .andExpect(view().name("/blog/create-blog"))
-                .andExpect(model().attributeExists("blog"))
+        mockMvc.perform(post("/post/create"))
+                .andExpect(view().name("/post/create-post"))
+                .andExpect(model().attributeExists("post"))
                 .andExpect(model().attributeExists("message"));
 
-        verify(blogService).save(any(Blog.class));
+        verify(postService).save(any(Post.class));
     }
 
     @Test
     void viewBlog() throws Exception {
-        when(blogService.findById(id)).thenReturn(blog);
+        when(postService.findById(id)).thenReturn(post);
 
-        mockMvc.perform(get("/blog/view/{id}", id))
-                .andExpect(view().name("/blog/view-blog"))
-                .andExpect(model().attribute("blog", blog));
+        mockMvc.perform(get("/post/view/{id}", id))
+                .andExpect(view().name("/post/view-post"))
+                .andExpect(model().attribute("post", post));
 
-        verify(blogService).findById(id);
+        verify(postService).findById(id);
     }
 
     @Test
     void showEditForm() throws Exception {
-        when(blogService.findById(id)).thenReturn(blog);
+        when(postService.findById(id)).thenReturn(post);
 
-        mockMvc.perform(get("/blog/edit/{id}", id))
-                .andExpect(view().name("/blog/edit-blog"))
-                .andExpect(model().attribute("blog", blog));
+        mockMvc.perform(get("/post/edit/{id}", id))
+                .andExpect(view().name("/post/edit-post"))
+                .andExpect(model().attribute("post", post));
 
-        verify(blogService).findById(id);
+        verify(postService).findById(id);
     }
 
     @Test
     void editBlogSuccess() throws Exception {
-        mockMvc.perform(post("/blog/edit"))
-                .andExpect(view().name("/blog/edit-blog"))
-                .andExpect(model().attributeExists("blog"))
+        mockMvc.perform(post("/post/edit"))
+                .andExpect(view().name("/post/edit-post"))
+                .andExpect(model().attributeExists("post"))
                 .andExpect(model().attributeExists("message"));
 
-        verify(blogService).save(any(Blog.class));
+        verify(postService).save(any(Post.class));
     }
 
     @Test
     void showDeleteForm() throws Exception {
-        when(blogService.findById(id)).thenReturn(blog);
+        when(postService.findById(id)).thenReturn(post);
 
-        mockMvc.perform(get("/blog/delete/{id}", id))
-                .andExpect(view().name("/blog/delete-blog"))
-                .andExpect(model().attribute("blog", blog));
+        mockMvc.perform(get("/post/delete/{id}", id))
+                .andExpect(view().name("/post/delete-post"))
+                .andExpect(model().attribute("post", post));
 
-        verify(blogService).findById(id);
+        verify(postService).findById(id);
     }
 
     @Test
     void deleteBlogSuccess() throws Exception {
-        mockMvc.perform(post("/blog/delete").param("id", id + ""))
+        mockMvc.perform(post("/post/delete").param("id", id + ""))
                 .andExpect(view().name("redirect:/"));
 
-        verify(blogService).delete(id);
+        verify(postService).delete(id);
     }
 }

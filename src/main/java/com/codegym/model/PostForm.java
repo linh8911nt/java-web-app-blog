@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
-public class BlogForm {
+public class PostForm {
     private Long id;
     private String title;
     private String summary;
@@ -14,10 +14,10 @@ public class BlogForm {
     private LocalDate createDate;
     private Category category;
 
-    public BlogForm() {
+    public PostForm() {
     }
 
-    public BlogForm(String title, String summary, String content, MultipartFile image, String imageUrl, LocalDate createDate, Category category) {
+    public PostForm(String title, String summary, String content, MultipartFile image, String imageUrl, LocalDate createDate, Category category) {
         this.title = title;
         this.summary = summary;
         this.content = content;

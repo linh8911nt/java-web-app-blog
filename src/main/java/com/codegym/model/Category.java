@@ -1,9 +1,12 @@
 package com.codegym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties("posts")
 @Table(name = "categories")
 public class Category {
 
@@ -13,8 +16,8 @@ public class Category {
 
     private String name;
 
-    @OneToMany(targetEntity = Blog.class)
-    private List<Blog> blogs;
+    @OneToMany(targetEntity = Post.class)
+    private List<Post> posts;
 
     public Category() {
     }
@@ -23,12 +26,12 @@ public class Category {
         this.name = name;
     }
 
-    public List<Blog> getBlogs() {
-        return blogs;
+    public List<Post> getPosts() {
+        return posts;
     }
 
-    public void setBlogs(List<Blog> blogs) {
-        this.blogs = blogs;
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public Long getId() {

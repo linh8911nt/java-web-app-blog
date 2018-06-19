@@ -12,28 +12,36 @@
         <th:block th:if="${message}">
             <p th:text="${message}"></p>
         </th:block>
-        <form th:action="@{/blog/edit}" th:object="${blog}" method="post">
+        <form th:action="@{/post/edit/__${postForm.id}__}" th:object="${postForm}" method="post" enctype="multipart/form-data">
             <input class="form-control" type="hidden" name="id" th:field="*{id}"/>
             <div class="form-group">
-                <label for="blog-title">Title:</label>
-                <input class="form-control" id="blog-title" type="text" th:field="*{title}"/>
+                <label for="post-title">Title:</label>
+                <input class="form-control" id="post-title" type="text" th:field="*{title}"/>
             </div>
             <div class="form-group">
-                <label for="blog-summary">Summary:</label>
-                <textarea class="form-control" id="blog-summary" th:field="*{summary}"></textarea>
+                <label for="post-summary">Summary:</label>
+                <textarea class="form-control" id="post-summary" th:field="*{summary}"></textarea>
             </div>
             <div class="form-group">
-                <label for="blog-content">Content:</label>
-                <textarea class="form-control" id="blog-content" th:field="*{content}"></textarea>
+                <label for="post-content">Content:</label>
+                <textarea class="form-control" id="post-content" th:field="*{content}"></textarea>
             </div>
             <div class="form-group col-md-2">
-                <label for="blog-category">Category:</label>
-                <select class="form-control" id="blog-category" th:field="*{category}">
+                <label for="post-category">Category:</label>
+                <select class="form-control" id="post-category" th:field="*{category}">
                     <option th:each="cate:${categories}"
                             th:value="${cate.id}"
                             th:text="${cate.name}"
-                            th:selected="${cate.id == blog.category.id}"></option>
+                            th:selected="${cate.id == postForm.category.id}"></option>
                 </select>
+            </div>
+            <div class="col-md-4">
+                <img class="img-thumbnail" th:src="@{/image/__${postForm.imageUrl}__}">
+                <p th:text="${postForm.createDate}"></p>
+            </div>
+            <div class="form-group">
+                <label>Feature image:</label>
+                <input type="file" th:field="*{image}"/>
             </div>
             <div class="form-group">
                 <label for="btn"></label>

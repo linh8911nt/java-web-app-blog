@@ -1,11 +1,14 @@
 package com.codegym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "blogs")
-public class Blog {
+@JsonIgnoreProperties("category")
+@Table(name = "posts")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,22 +21,35 @@ public class Blog {
     private String content;
 
     private String image;
-    private LocalDate createDate = LocalDate.now();
+    private LocalDate createDate;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Blog() {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Post() {
     }
 
-    public Blog(String title, String summary, String content, String image, LocalDate createDate, Category category) {
+    public Post(String title, String summary, String content, String image, LocalDate createDate, Category category, User user) {
         this.title = title;
         this.summary = summary;
         this.content = content;
         this.image = image;
         this.createDate = createDate;
         this.category = category;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getImage() {

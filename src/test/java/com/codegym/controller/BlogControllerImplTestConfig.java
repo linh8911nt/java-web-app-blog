@@ -1,9 +1,7 @@
 package com.codegym.controller;
 
-import com.codegym.service.BlogService;
-import com.codegym.service.CategoryService;
-import com.codegym.service.impl.BlogServiceImpl;
-import com.codegym.service.impl.CategoryServiceImpl;
+import com.codegym.service.PostService;
+import com.codegym.service.impl.PostServiceImpl;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,8 +19,8 @@ import javax.sql.DataSource;
 public class BlogControllerImplTestConfig {
 
     @Bean
-    public BlogService blogService(){
-        return Mockito.mock(BlogServiceImpl.class);
+    public PostService blogService(){
+        return Mockito.mock(PostServiceImpl.class);
     }
 
 //    @Bean

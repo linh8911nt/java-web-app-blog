@@ -19,23 +19,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div th:each="blog : ${blogs}" class="row post">
-                    <div class="col-md-4">
-                        <img class="img-thumbnail" th:src="@{/image/__${blog.image}__}">
+                <div th:each="post : ${posts}" class="row post">
+                    <div class="col-md-12">
+                        <img class="img-fluid" th:src="@{/image/__${post.image}__}">
                     </div>
                     <div class="col-md-12">
-                        <a th:href="@{/blog/view/__${blog.id}__}"><h3 th:text="${blog.title}"></h3></a>
+                        <a th:href="@{/post/view/__${post.id}__}"><h3 th:text="${post.title}"></h3></a>
                     </div>
-                    <div class="col-md-7 post-teaser" th:utext="${blog.summary}"></div>
+                    <div class="col-md-7 post-teaser" th:utext="${post.summary}"></div>
                     <div class="col-md-12 post-meta">
-                        <span th:text="${blog.createDate}"></span>
-                        <span th:text="${blog.category.name}"></span>
+                        <span th:text="${post.createDate}"></span>
+                        <span th:text="${post.category.name}"></span>
                     </div>
                 </div>
                 <div>
-                    <a th:href="@{'/'(page=${blogs.number - 1})}" th:if="${blogs.hasPrevious()}">Previous</a>
-                    <span th:text="${blogs.number + 1}"></span>/<span th:text="${blogs.totalPages}"></span>
-                    <a th:href="@{'/'(page=${blogs.number + 2})}" th:if="${blogs.hasNext()}">Next</a>
+                    <a th:href="@{'/'(page=${posts.number - 1})}" th:if="${posts.hasPrevious()}">Previous</a>
+                    <span th:text="${posts.number + 1}"></span>/<span th:text="${posts.totalPages}"></span>
+                    <a th:href="@{'/'(page=${posts.number + 2})}" th:if="${posts.hasNext()}">Next</a>
                 </div>
             </div>
             <div class="col-md-4">

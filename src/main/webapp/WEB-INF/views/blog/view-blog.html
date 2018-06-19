@@ -10,14 +10,17 @@
 <section layout:fragment="content">
     <div class="container">
         <div class="col-md-8">
-            <h3 th:text="${blog.title}"></h3> (<a th:href="@{/blog/edit/__${blog.id}__}">Edit</a>)
-            (<a th:href="@{/blog/delete/__${blog.id}__}">Delete</a>)
-            <div class="post-single-meta">
-                <span th:text="${blog.createDate}"></span>
+            <div class="col-md-4">
+                <img class="img-thumbnail" th:src="@{/image/__${post.image}__}">
+                <p th:text="${post.createDate}"></p>
             </div>
-            <div class="post-single-teaser" th:utext="${blog.summary}"></div>
-            <img class="img-fluid" th:src="@{/image/__${blog.image}__}">
-            <div class="post-single-content" th:utext="${blog.content}"></div>
+            <h3 th:text="${post.title}"></h3> (<a th:href="@{/post/edit/__${post.id}__}">Edit</a>)
+            (<a th:href="@{/post/delete/__${post.id}__}">Delete</a>)
+            <div class="post-single-meta">
+                <span th:text="${post.createDate}"></span>
+            </div>
+            <div class="post-single-teaser" th:utext="${post.summary}"></div>
+            <div class="post-single-content" th:utext="${post.content}"></div>
         </div>
     </div>
 </section>

@@ -9,22 +9,26 @@
 <body>
 <section layout:fragment="content">
     <div class="container">
-        <form method="post" th:object="${blog}" th:action="@{/blog/delete}">
+        <form method="post" th:object="${post}" th:action="@{/post/delete/__${post.id}__}">
             <input class="form-control" type="hidden" th:field="*{id}"/>
-                <div class="form-group">
-                    <label><h3 th:text="${blog.title}"></h3></label>
-                </div>
-                <div class="form-group">
-                    <label><p th:text="${blog.summary}"></p></label>
-                </div>
-                <div class="form-group">
-                    <label><p th:text="${blog.content}"></p></label>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <p>Thể Loại: <span th:text="${blog.category.name}"></span> </p>
-                    </label>
-                </div>
+            <div class="col-md-4">
+                <img class="img-thumbnail" th:src="@{/image/__${post.image}__}">
+                <p th:text="${post.createDate}"></p>
+            </div>
+            <div class="form-group">
+                <label><h3 th:text="${post.title}"></h3></label>
+            </div>
+            <div class="form-group">
+                <label><p th:text="${post.summary}"></p></label>
+            </div>
+            <div class="form-group">
+                <label><p th:text="${post.content}"></p></label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <p>Thể Loại: <span th:text="${post.category.name}"></span></p>
+                </label>
+            </div>
             <button class="btn btn-primary" type="submit">Delete</button>
         </form>
     </div>

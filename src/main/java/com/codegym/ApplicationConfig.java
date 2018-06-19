@@ -1,10 +1,13 @@
 package com.codegym;
 
 import com.codegym.formatter.CategoryFormatter;
-import com.codegym.service.BlogService;
+import com.codegym.repository.RoleRepository;
+import com.codegym.service.PostService;
 import com.codegym.service.CategoryService;
-import com.codegym.service.impl.BlogServiceImpl;
+import com.codegym.service.UserService;
+import com.codegym.service.impl.PostServiceImpl;
 import com.codegym.service.impl.CategoryServiceImpl;
+import com.codegym.service.impl.UserServiceImpl;
 import com.codegym.utils.StorageUtils;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.BeansException;
@@ -26,6 +29,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -67,13 +71,24 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
     }
 
     @Bean
-    public BlogService blogService(){
-        return new BlogServiceImpl();
+    public PostService blogService(){
+        return new PostServiceImpl();
     }
 
     @Bean
     public CategoryService categoryService(){
         return new CategoryServiceImpl();
+    }
+
+    @Bean
+    public UserService userService(){
+        return new UserServiceImpl();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder;
     }
 
     @Override
@@ -181,7 +196,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf8"  + "&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/post?useUnicode=true&characterEncoding=utf8"  + "&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         dataSource.setUsername( "root" );
         dataSource.setPassword( "12345678" );
         return dataSource;
